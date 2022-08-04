@@ -1,0 +1,25 @@
+{
+  "name": "web3rsvp",
+  "version": "1.0.0",
+  "description": "web3-native Eventbrite",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "web3rsvp"
+  },
+  "keywords": [
+    "web3",
+    "rvsp",
+    "react",
+    "hardhat",
+    "solidity"
+  ],
+  "author": "ephcrat",
+  "license": "ISC",
+  "devDependencies": {
+    "hardhat": "^2.10.1"
+  }
+}
