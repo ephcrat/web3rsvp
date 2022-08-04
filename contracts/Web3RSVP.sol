@@ -47,6 +47,7 @@ Requeriments:
                 maxCapacity
             )
         );
+        require(idToEvent[eventId].eventTimestamp != 0, "ALREADY REGISTERED");
 
         //arrays to track addresses of users that RSVPs and addresses of actual attendees (those two arrays are defined on the CreateEvent struct)
         address[] memory confirmedRSVPs; // memory (data location) is where the array is stored
@@ -215,7 +216,7 @@ Withdraw from the smart contract all deposits of users that didn't attend to the
 
         // if this fails
         if (!sent) {
-            myEvent.paidOut == false;
+            myEvent.paidOut = false;
         }
 
         require(sent, "Failed to send Ether");
