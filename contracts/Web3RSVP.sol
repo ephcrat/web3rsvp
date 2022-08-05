@@ -2,6 +2,27 @@
 pragma solidity ^0.8.9;
 
 contract Web3RSVP {
+    /*
+Events: Specific actions than can be listened by the subgraph. This will enable us to make queries to the smart contract from the front-end. Defining the events it's not enough, they need to be emitted after an specific action has been taked
+
+*/
+    //Contains the details of the event
+    event NewEventCreated(
+        bytes32 eventID,
+        address creatorAddress,
+        uint256 eventTimestamp,
+        uint256 maxCapacity,
+        uint256 deposit,
+        string eventDataCID
+    );
+
+    //Contains the data of the user that RSVP'd and the event
+    event NewRSVP(bytes32 eventID, address attendeeAddress);
+    //Contains the data of the user that attendee the event and the event itself
+    event ConfirmedAttendee(bytes32 eventID, address attendeeAddress);
+    //Data about unclaimed deposits of an event being sent (or not) to the organizer
+    event DepositsPaidOut(bytes32 eventID);
+
     struct CreateEvent {
         bytes32 eventId; //bytes32: string with a max length of 64 chars.
         string eventDataCID;
@@ -47,7 +68,7 @@ Requeriments:
                 maxCapacity
             )
         );
-        require(idToEvent[eventId].eventTimestamp != 0, "ALREADY REGISTERED");
+        // require(idToEvent[eventId].eventTimestamp != 0, "ALREADY REGISTERED");
 
         //arrays to track addresses of users that RSVPs and addresses of actual attendees (those two arrays are defined on the CreateEvent struct)
         address[] memory confirmedRSVPs; // memory (data location) is where the array is stored
@@ -64,6 +85,15 @@ Requeriments:
             confirmedRSVPs,
             claimedRSVPs,
             false //paidOut is false because there's no payouts at the time of the event creation
+        );
+        //emits the event
+        emit NewEventCreated(
+            eventId,
+            msg.sender,
+            eventTimestamp,
+            maxCapacity,
+            deposit,
+            eventDataCID
         );
     }
 
@@ -106,6 +136,7 @@ Requeriments:
         }
 
         myEvent.confirmedRSVPs.push(payable(msg.sender));
+        emit NewRSVP(eventId, msg.sender);
     }
 
     /*
@@ -157,6 +188,7 @@ When the user check-in at the event, they got refunded their deposit
             myEvent.claimedRSVPs.pop();
         }
         require(sent, "Failed to send Ether");
+        emit ConfirmedAttendee(eventId, attendee);
     }
 
     /*
@@ -191,13 +223,13 @@ Withdraw from the smart contract all deposits of users that didn't attend to the
         // Make sure the deposit hasn't been already withdrawed (requirement)
         require(!myEvent.paidOut, "Funds already withdrawed");
 
-        // check if it's been 7 days past myEvent.eventTimestamp
+        // check if it's been 7 days past myEvent.eventTimestamp (requirement)
         require(
             block.timestamp >= (myEvent.eventTimestamp + 7 days),
             "Need to wait 7 days after the event to receive the funds"
         );
 
-        // only the event owner can withdraw
+        // only the event owner can withdraw (requirement)
         require(
             msg.sender == myEvent.eventOwner,
             "Only the event owner can withdraw the funds"
@@ -220,5 +252,6 @@ Withdraw from the smart contract all deposits of users that didn't attend to the
         }
 
         require(sent, "Failed to send Ether");
+        emit DepositsPaidOut(eventId);
     }
 }
