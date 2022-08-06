@@ -4,7 +4,8 @@
   "description": "web3-native Eventbrite",
   "main": "index.js",
   "scripts": {
-    "script": "node scripts/run.js"
+    "script": "node scripts/run.js",
+    "deploy": "npx hardhat run scripts/deploy.js --network mumbai"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,8 @@
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^1.0.2",
     "hardhat": "^2.10.1"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.1"
   }
 }
