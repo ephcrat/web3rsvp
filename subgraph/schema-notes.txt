@@ -1,0 +1,1 @@
+Entity -> Similar to an object, keys that can be queried for their value. We can use "!" at the end of the value to make that field required, which means that its value can't be null. Non-required fields can have null as value. The keyword @derivedFrom(field: "") allow us to reference data from another entity (reverse lookup).
