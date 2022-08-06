@@ -1,5 +1,5 @@
 {
-  "name": "web3rsvp",
+  "name": "smartcontract",
   "version": "1.0.0",
   "description": "web3-native Eventbrite",
   "main": "index.js",
@@ -19,7 +19,7 @@
     "solidity"
   ],
   "author": "ephcrat",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^1.0.2",
     "hardhat": "^2.10.1"
